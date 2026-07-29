@@ -1,0 +1,278 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* The neutral shell. Deliberately quiet so template previews carry the colour. */
+  --color-shell: #fbfbfa;
+  --color-shell-raised: #ffffff;
+  --color-shell-ink: #18181b;
+  --color-shell-muted: #62626b;
+  --color-shell-line: #e6e6e3;
+  --color-shell-accent: #18181b;
+}
+
+@layer base {
+  :root {
+    color-scheme: light dark;
+    --shell: #fbfbfa;
+    --shell-raised: #ffffff;
+    --shell-sunken: #f4f4f2;
+    --shell-ink: #18181b;
+    --shell-muted: #62626b;
+    --shell-line: #e5e5e2;
+    --shell-line-strong: #d4d4d0;
+    --shell-focus: #2563eb;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --shell: #101012;
+      --shell-raised: #18181b;
+      --shell-sunken: #0a0a0b;
+      --shell-ink: #f4f4f5;
+      --shell-muted: #a1a1aa;
+      --shell-line: #27272a;
+      --shell-line-strong: #3f3f46;
+      --shell-focus: #60a5fa;
+    }
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    background: var(--shell);
+    color: var(--shell-ink);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* A single visible focus treatment everywhere — never removed. */
+  :focus-visible {
+    outline: 2px solid var(--shell-focus);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+
+  button,
+  [role="button"],
+  label[for],
+  summary {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+
+  /* Native controls should follow the surface they sit on. */
+  input,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+
+  input[type="date"],
+  input[type="time"] {
+    /* Keep the picker indicator visible in dark mode. */
+    color-scheme: inherit;
+  }
+}
+
+@layer utilities {
+  /* Numbers must never reflow as they tick. */
+  .digits {
+    font-variant-numeric: tabular-nums lining-nums;
+    font-feature-settings: "tnum" 1, "lnum" 1;
+    font-family: var(--font-digits, var(--font-sans));
+    font-weight: var(--digit-weight, 500);
+    letter-spacing: var(--digit-tracking, -0.04em);
+  }
+
+  .unit-label {
+    letter-spacing: var(--label-tracking, 0.18em);
+  }
+
+  .scrollbar-none {
+    scrollbar-width: none;
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* ---------------------------------------------------------------- motifs --
+   Each template's backdrop. All pure CSS/SVG so there is nothing to load and
+   nothing to shift the layout.
+   ------------------------------------------------------------------------- */
+
+.motif {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* Romantic — warm bloom plus a fine grain. */
+.motif-romantic::before {
+  content: "";
+  position: absolute;
+  inset: -20%;
+  background:
+    radial-gradient(closest-side at 30% 18%, color-mix(in srgb, var(--primary) 22%, transparent), transparent),
+    radial-gradient(closest-side at 78% 72%, color-mix(in srgb, var(--accent) 16%, transparent), transparent);
+  filter: blur(8px);
+}
+.motif-romantic::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.32;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='0.5'/%3E%3C/svg%3E");
+}
+
+/* Tech — grid floor and a still starfield. */
+.motif-tech::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(to right, color-mix(in srgb, var(--primary) 14%, transparent) 1px, transparent 1px),
+    linear-gradient(to bottom, color-mix(in srgb, var(--primary) 14%, transparent) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 120% 80% at 50% 120%, #000 10%, transparent 70%);
+}
+.motif-tech::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image:
+    radial-gradient(1.5px 1.5px at 12% 22%, #fff 50%, transparent 50%),
+    radial-gradient(1px 1px at 34% 9%, #fff 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 58% 31%, #fff 50%, transparent 50%),
+    radial-gradient(1px 1px at 79% 14%, #fff 50%, transparent 50%),
+    radial-gradient(1px 1px at 91% 44%, #fff 50%, transparent 50%),
+    radial-gradient(1.5px 1.5px at 22% 61%, #fff 50%, transparent 50%),
+    radial-gradient(1px 1px at 67% 77%, #fff 50%, transparent 50%),
+    radial-gradient(1px 1px at 44% 88%, #fff 50%, transparent 50%);
+  opacity: 0.5;
+}
+
+/* Education — dotted paper. */
+.motif-education::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: radial-gradient(
+    color-mix(in srgb, var(--primary) 30%, transparent) 1.1px,
+    transparent 1.1px
+  );
+  background-size: 26px 26px;
+  mask-image: linear-gradient(to bottom, #000, transparent 88%);
+  opacity: 0.55;
+}
+
+/* Travel — sky wash above a hard horizon. */
+.motif-travel::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 38% 0;
+  background: linear-gradient(
+    to bottom,
+    color-mix(in srgb, var(--primary) 24%, transparent),
+    transparent
+  );
+}
+.motif-travel::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 38%;
+  height: 1px;
+  background: color-mix(in srgb, var(--fg) 22%, transparent);
+}
+
+/* Celebration — offset corner blocks. Both wedges use the primary: the blue
+   accent over a warm ground turns muddy, so it is reserved for the confetti. */
+.motif-celebration::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(135deg, color-mix(in srgb, var(--primary) 14%, transparent) 0 13%, transparent 13%),
+    linear-gradient(315deg, color-mix(in srgb, var(--primary) 9%, transparent) 0 16%, transparent 16%);
+}
+
+/* Minimal has no motif by design. */
+
+/* ------------------------------------------------------------ animations -- */
+
+@keyframes soon-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 12px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes soon-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  40% {
+    transform: scale(1.035);
+  }
+}
+
+@keyframes soon-fall {
+  from {
+    transform: translate3d(0, -12vh, 0) rotate(0deg);
+    opacity: 1;
+  }
+  to {
+    transform: translate3d(var(--drift, 0px), 108vh, 0) rotate(var(--spin, 360deg));
+    opacity: 0.9;
+  }
+}
+
+.animate-rise {
+  animation: soon-rise 420ms cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+.animate-pulse-once {
+  animation: soon-pulse 520ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.confetti-piece {
+  position: absolute;
+  top: 0;
+  width: 8px;
+  height: 14px;
+  border-radius: 2px;
+  animation: soon-fall var(--duration, 3s) linear var(--delay, 0s) forwards;
+}
+
+/* Motion is decoration here; honour the system preference completely. */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .confetti-piece {
+    display: none;
+  }
+}
