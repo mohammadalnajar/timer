@@ -1,0 +1,44 @@
+# Soon (timer) — Production (VPS Deployment)
+# Usage: docker compose -f docker-compose.prod.yml up --build -d
+#
+# Reverse-proxied by the host's nginx. No database container: storage is SQLite
+# on the "soon-data" volume, which is the only copy of every countdown —
+# see DEPLOYMENT.md before running `down -v`.
+
+services:
+    app:
+        build: .
+        container_name: soon
+        restart: unless-stopped
+        env_file: .env.production
+        environment:
+            NODE_ENV: production
+            NEXT_TELEMETRY_DISABLED: '1'
+            # Next's standalone server reads these two.
+            PORT: 3003
+            HOSTNAME: 0.0.0.0
+            # Points at the volume mounted below. Leave this alone.
+            SOON_DB_PATH: /data/soon.db
+        volumes:
+            # Every countdown lives here. Survives rebuilds and restarts.
+            - soon-data:/data
+        ports:
+            - '127.0.0.1:3003:3003' # Localhost only — nginx reverse-proxies to this
+        networks:
+            - proxy
+        deploy:
+            resources:
+                limits:
+                    memory: 512M
+        logging:
+            driver: json-file
+            options:
+                max-size: '10m'
+                max-file: '3'
+
+networks:
+    proxy:
+        external: true
+
+volumes:
+    soon-data:

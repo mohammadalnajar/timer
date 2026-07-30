@@ -100,12 +100,16 @@ templates were measured against rendered output and clear 4.5:1.
 
 ## Deploying
 
-**The one thing to change.** Storage is SQLite via `better-sqlite3`, which is
-perfect locally and on any host with a persistent disk (a VPS, Docker, Fly,
-Railway) but **will not work on Vercel or other serverless platforms** — the
-filesystem is ephemeral, so countdowns would vanish between requests.
+**VPS with Docker Compose — see [DEPLOYMENT.md](DEPLOYMENT.md).** That is the
+supported path, and what the `Dockerfile` and `docker-compose.prod.yml` in this
+repo are built for: SQLite on a mounted volume, one container, reverse-proxied by
+the host's nginx.
 
-Every query lives in [store.ts](src/lib/store.ts) behind four functions:
+**Serverless (Vercel, Netlify, Cloudflare) needs a storage change first.**
+`better-sqlite3` writes to a local file, and those platforms have an ephemeral
+filesystem — countdowns would vanish between requests.
+
+Every query lives in [store.ts](src/lib/store.ts) behind three functions:
 
 ```
 createCountdown(input) -> { countdown, editToken }

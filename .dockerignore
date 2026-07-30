@@ -1,0 +1,29 @@
+# Keep the build context small and never ship local state into the image.
+.git
+.gitignore
+.github
+
+node_modules
+.next
+out
+build
+
+# The live SQLite database lives on a volume, never in the image.
+data
+
+.env
+.env.*
+!.env.example
+
+.claude
+.vscode
+.idea
+.DS_Store
+
+Dockerfile
+.dockerignore
+docker-compose*.yml
+
+*.md
+npm-debug.log*
+*.tsbuildinfo
